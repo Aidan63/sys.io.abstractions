@@ -20,6 +20,8 @@ steps:
 
     lix download
 
+    lix download haxe nightly
+
     lix use haxe nightly
 
     haxe test.hxml -D reporter=test.XUnit2Reporter -D report-name=Test-Results-$AGENT_OS
