@@ -20,6 +20,8 @@ steps:
 
     lix download
 
+    lix use haxe nightly
+
     haxe test.hxml -D reporter=test.XUnit2Reporter -D report-name=Test-Results-$AGENT_OS
   displayName: Run Tests
   workingDirectory: $(Build.SourcesDirectory)
