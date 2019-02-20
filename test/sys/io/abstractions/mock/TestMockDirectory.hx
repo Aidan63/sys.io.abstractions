@@ -7,8 +7,12 @@ using buddy.Should;
 
 class TestMockDirectory extends BuddySuite
 {
+    final separator : String;
+
     public function new()
     {
+        separator = #if windows '\\' #else '/' #end;
+
         describe('TestMockDirectory', {
             describe('checking for a directory', {
                 var f = [
@@ -49,7 +53,7 @@ class TestMockDirectory extends BuddySuite
 
                 it('will add a trailing slash to the path', {
                     directories.create('/home/user/documents/some');
-                    d.has('/home/user/documents/some${sys.io.abstractions.Path.separator}').should.be(true);
+                    d.has('/home/user/documents/some${separator}').should.be(true);
                 });
             });
 

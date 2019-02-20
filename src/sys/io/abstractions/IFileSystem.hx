@@ -5,6 +5,4 @@ interface IFileSystem
     final directory : IDirectory;
 
     final file : IFile;
-
-    final path : Path;
 }

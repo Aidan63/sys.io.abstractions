@@ -8,8 +8,6 @@ class MockFileSystem implements IFileSystem
 
     public final file : IFile;
 
-    public final path : Path;
-
     public final files : Map<String, MockFileData>;
 
     public final directories : Array<String>;
