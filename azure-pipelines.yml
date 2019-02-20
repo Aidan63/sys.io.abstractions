@@ -1,0 +1,31 @@
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-16.04'
+    mac:
+      imageName: 'macos-10.13'
+    windows:
+      imageName: 'vs2017-win2016'
+
+pool:
+  vmImage: $(imageName)
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.15.x'
+
+- bash: ci.sh
+  displayName: Run Tests
+  workingDirectory: $(Build.SourcesDirectory)
+  env:
+    AGENT_OS: $(Agent.OS)
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: xUnit
+    testResultsFiles: test-results.xml
+    searchFolder: $(Build.SourcesDirectory)
+    testRunTitle: $(Agent.OS) Tests
+    buildPlatform: $(Agent.OS)
+    failTaskOnFailedTests: true
