@@ -1,5 +1,8 @@
 package sys.io.abstractions.mock;
 
+import sys.io.abstractions.exceptions.ArgumentException;
+import sys.io.abstractions.exceptions.NotFoundException;
+
 using Lambda;
 using StringTools;
 
@@ -25,6 +28,11 @@ class MockDirectory implements IDirectory
      */
     public function exist(_path : String) : Bool
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
         var normalized = haxe.io.Path.normalize(_path);
 
         for (directory in directories)
@@ -52,7 +60,14 @@ class MockDirectory implements IDirectory
      */
     public function create(_path : String)
     {
-        directories.push(haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path)));
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        var normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
+
+        directories.push(normalized);
     }
 
     /**
@@ -61,7 +76,14 @@ class MockDirectory implements IDirectory
      */
     public function remove(_path : String)
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
         var normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
+
+        var totalRemoved = 0;
         
         var toRemove = [];
         for (directory in directories)
@@ -75,6 +97,7 @@ class MockDirectory implements IDirectory
         for (path in toRemove)
         {
             directories.remove(path);
+            totalRemoved++;
         }
 
         var toRemove = [];
@@ -89,6 +112,12 @@ class MockDirectory implements IDirectory
         for (path in toRemove)
         {
             files.remove(path);
+            totalRemoved++;
+        }
+
+        if (totalRemoved == 0)
+        {
+            throw new NotFoundException('Directory ${normalized} not found');
         }
     }
 
@@ -98,9 +127,19 @@ class MockDirectory implements IDirectory
      * @return Array<String>
      */
     public function read(_path : String) : Array<String>
-    {      
+    {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
         var output    = [];
         var normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
+
+        if (!exist(normalized))
+        {
+            throw new NotFoundException('Directory ${normalized} does not exist');
+        }
 
         for (directory in directories)
         {
@@ -136,6 +175,18 @@ class MockDirectory implements IDirectory
      */
     public function isDirectory(_path : String) : Bool
     {
-        return !files.exists(haxe.io.Path.normalize(_path));
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (!exist(normalized) && !files.exists(normalized))
+        {
+            throw new NotFoundException('${normalized} is not a file or directory');
+        }
+
+        return !files.exists(normalized);
     }
 }

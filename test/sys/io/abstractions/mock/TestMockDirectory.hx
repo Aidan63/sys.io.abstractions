@@ -1,6 +1,8 @@
 package sys.io.abstractions.mock;
 
 import buddy.BuddySuite;
+import sys.io.abstractions.exceptions.ArgumentException;
+import sys.io.abstractions.exceptions.NotFoundException;
 
 using Lambda;
 using buddy.Should;
@@ -35,6 +37,12 @@ class TestMockDirectory extends BuddySuite
                     directories.exist('/home/user/documents/some').should.be(true);
                     directories.exist('/home/user/documents/other').should.be(false);
                 });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    directories.exist.bind('').should.throwType(ArgumentException);
+                    directories.exist.bind(' ').should.throwType(ArgumentException);
+                    directories.exist.bind('   ').should.throwType(ArgumentException);
+                });
             });
 
             describe('creating a directory', {
@@ -55,6 +63,12 @@ class TestMockDirectory extends BuddySuite
                     directories.create('/home/user/documents/some');
                     d.has('/home/user/documents/some${separator}').should.be(true);
                 });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    directories.create.bind('').should.throwType(ArgumentException);
+                    directories.create.bind(' ').should.throwType(ArgumentException);
+                    directories.create.bind('   ').should.throwType(ArgumentException);
+                });
             });
 
             describe('removing a directory', {
@@ -71,6 +85,16 @@ class TestMockDirectory extends BuddySuite
                     f.exists('/home/user/documents/file1.txt').should.be(false);
                     f.exists('/home/user/documents/folder/file2.txt').should.be(false);
                     d.has('/home/user/documents/folder/other/').should.be(false);
+                });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    directories.remove.bind('').should.throwType(ArgumentException);
+                    directories.remove.bind(' ').should.throwType(ArgumentException);
+                    directories.remove.bind('   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the directory was not found', {
+                    directories.remove.bind('/home/user/does_not_exist').should.throwType(NotFoundException);
                 });
             });
 
@@ -90,6 +114,16 @@ class TestMockDirectory extends BuddySuite
 
                 it('will normalize the input path and read fetch all files and directories within the directory', {
                     directories.read('/home/user/documents/other/..').should.containAll([ '/home/user/documents/file1.txt', '/home/user/documents/folder' ]);
+                });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    directories.read.bind('').should.throwType(ArgumentException);
+                    directories.read.bind(' ').should.throwType(ArgumentException);
+                    directories.read.bind('   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the directory was not found', {
+                    directories.read.bind('/home/user/does_not_exist').should.throwType(NotFoundException);
                 });
             });
 
@@ -113,6 +147,16 @@ class TestMockDirectory extends BuddySuite
                 it('will normalize a path and return if its a directory', {
                     directories.isDirectory('/home/user/documents/other/../file1.txt').should.be(false);
                     directories.isDirectory('/home/user/documents/other/../').should.be(true);
+                });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    directories.isDirectory.bind('').should.throwType(ArgumentException);
+                    directories.isDirectory.bind(' ').should.throwType(ArgumentException);
+                    directories.isDirectory.bind('   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the directory was not found', {
+                    directories.isDirectory.bind('/home/user/does_not_exist').should.throwType(NotFoundException);
                 });
             });
         });

@@ -6,12 +6,9 @@ class FileSystem implements IFileSystem
 
     public final file : IFile;
 
-    public final path : Path;
-
     public function new()
     {
         directory = new Directory();
         file      = new File();
-        path      = new Path();
     }
 }

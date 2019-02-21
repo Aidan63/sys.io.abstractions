@@ -1,6 +1,10 @@
 package sys.io.abstractions.concrete;
 
 import haxe.io.Bytes;
+import sys.io.abstractions.exceptions.ArgumentException;
+import sys.io.abstractions.exceptions.NotFoundException;
+
+using StringTools;
 
 /**
  * //
@@ -18,6 +22,11 @@ class File implements IFile
      */
     public function create(_path : String)
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
         sys.io.File.saveContent(_path, '');
     }
 
@@ -27,6 +36,16 @@ class File implements IFile
      */
     public function remove(_path : String)
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
         sys.FileSystem.deleteFile(_path);
     }
 
@@ -47,6 +66,16 @@ class File implements IFile
      */
     public function writeText(_path : String, _text : String)
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
         sys.io.File.saveContent(_path, _text);
     }
 
@@ -57,6 +86,16 @@ class File implements IFile
      */
     public function writeBytes(_path : String, _bytes : Bytes)
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
         sys.io.File.saveBytes(_path, _bytes);
     }
 
@@ -67,6 +106,16 @@ class File implements IFile
      */
     public function appendText(_path : String, _text : String)
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
         var out = sys.io.File.append(_path, false);
         out.writeString(_text);
         out.close();
@@ -79,6 +128,16 @@ class File implements IFile
      */
     public function appendBytes(_path : String, _bytes : Bytes)
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
         var out = sys.io.File.append(_path);
         out.writeBytes(_bytes, 0, _bytes.length);
         out.close();
@@ -91,6 +150,16 @@ class File implements IFile
      */
     public function getText(_path : String) : String
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
         return sys.io.File.getContent(_path);
     }
 
@@ -101,6 +170,16 @@ class File implements IFile
      */
     public function getBytes(_path : String) : Bytes
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
         return sys.io.File.getBytes(_path);
     }
 }
