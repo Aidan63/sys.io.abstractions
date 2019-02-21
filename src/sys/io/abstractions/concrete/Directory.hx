@@ -1,5 +1,10 @@
 package sys.io.abstractions.concrete;
 
+import sys.io.abstractions.exceptions.ArgumentException;
+import sys.io.abstractions.exceptions.NotFoundException;
+
+using StringTools;
+
 /**
  * Concrete directory implementation, operates on the actual file system.
  */
@@ -16,6 +21,11 @@ class Directory implements IDirectory
      */
     public function create(_path : String)
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
         sys.FileSystem.createDirectory(_path);
     }
 
@@ -25,6 +35,16 @@ class Directory implements IDirectory
      */
     public function remove(_path : String)
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
         sys.FileSystem.deleteDirectory(_path);
     }
 
@@ -45,36 +65,36 @@ class Directory implements IDirectory
      */
     public function read(_path : String) : Array<String>
     {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
         return sys.FileSystem.readDirectory(_path);
     }
 
     /**
      * //
      * @param _path //
-     * @return Array<String>
+     * @return Bool
      */
-    public function readDirectories(_path : String) : Array<String>
+    public function isDirectory(_path : String) : Bool
     {
-        return [ for (item in sys.FileSystem.readDirectory(_path)) if (sys.FileSystem.isDirectory(item)) item ];
-    }
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
 
-    /**
-     * //
-     * @param _path //
-     * @return Array<String>
-     */
-    public function readFiles(_path : String) : Array<String>
-    {
-        return [ for (item in sys.FileSystem.readDirectory(_path)) if (!sys.FileSystem.isDirectory(item)) item ];
-    }
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
 
-    /**
-     * //
-     * @param _path1 //
-     * @param _path2 //
-     */
-    public function rename(_path1 : String, _path2 : String)
-    {
-        sys.FileSystem.rename(_path1, _path2);
+        return sys.FileSystem.isDirectory(_path);
     }
 }
