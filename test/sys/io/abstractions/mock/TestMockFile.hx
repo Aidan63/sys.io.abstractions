@@ -2,6 +2,8 @@ package sys.io.abstractions.mock;
 
 import haxe.io.Bytes;
 import buddy.BuddySuite;
+import sys.io.abstractions.exceptions.ArgumentException;
+import sys.io.abstractions.exceptions.NotFoundException;
 
 using buddy.Should;
 
@@ -34,6 +36,12 @@ class TestMockFile extends BuddySuite
                         file.data.length.should.be(0);
                     }
                 });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.create.bind('').should.throwType(ArgumentException);
+                    file.create.bind(' ').should.throwType(ArgumentException);
+                    file.create.bind('   ').should.throwType(ArgumentException);
+                });
             });
 
             describe('removing a file', {
@@ -50,8 +58,18 @@ class TestMockFile extends BuddySuite
                 });
 
                 it('will normalize the path and remove the file', {
-                    file.remove('/home/user/documents/folder/../file.txt');
+                    file.remove('/home/user/documents/folder/../file2.txt');
                     f.exists('/home/user/documents/folder/../file2.txt').should.be(false);
+                });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.remove.bind('').should.throwType(ArgumentException);
+                    file.remove.bind(' ').should.throwType(ArgumentException);
+                    file.remove.bind('   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the file was not found', {
+                    file.remove.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
                 });
             });
 
@@ -102,6 +120,16 @@ class TestMockFile extends BuddySuite
                         file2.text.should.be('world');
                     }
                 });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.writeText.bind('', '').should.throwType(ArgumentException);
+                    file.writeText.bind(' ', '').should.throwType(ArgumentException);
+                    file.writeText.bind('   ', '').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the file was not found', {
+                    file.writeText.bind('/home/user/does_not_exist.txt', '').should.throwType(NotFoundException);
+                });
             });
 
             describe('writing bytes to a file', {
@@ -127,6 +155,16 @@ class TestMockFile extends BuddySuite
                         file2.data.length.should.be(12);
                     }
                 });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.writeBytes.bind('', Bytes.alloc(0)).should.throwType(ArgumentException);
+                    file.writeBytes.bind(' ', Bytes.alloc(0)).should.throwType(ArgumentException);
+                    file.writeBytes.bind('   ', Bytes.alloc(0)).should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the file was not found', {
+                    file.writeBytes.bind('/home/user/does_not_exist.txt', Bytes.alloc(0)).should.throwType(NotFoundException);
+                });
             });
 
             describe('appending text to a file', {
@@ -142,6 +180,16 @@ class TestMockFile extends BuddySuite
                     {
                         file.text.should.be('helloworld');
                     }
+                });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.appendText.bind('', '').should.throwType(ArgumentException);
+                    file.appendText.bind(' ', '').should.throwType(ArgumentException);
+                    file.appendText.bind('   ', '').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the file was not found', {
+                    file.appendText.bind('/home/user/does_not_exist.txt', '').should.throwType(NotFoundException);
                 });
             });
 
@@ -159,6 +207,16 @@ class TestMockFile extends BuddySuite
                         file.text.should.be('helloworld');
                     }
                 });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.appendBytes.bind('', Bytes.alloc(0)).should.throwType(ArgumentException);
+                    file.appendBytes.bind(' ', Bytes.alloc(0)).should.throwType(ArgumentException);
+                    file.appendBytes.bind('   ', Bytes.alloc(0)).should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the file was not found', {
+                    file.appendBytes.bind('/home/user/does_not_exist.txt', Bytes.alloc(0)).should.throwType(NotFoundException);
+                });
             });
 
             describe('getting bytes from a file', {
@@ -169,6 +227,16 @@ class TestMockFile extends BuddySuite
                 it('can read the bytes from a file', {
                     file.getBytes('/home/user/documents/file1.txt').toString().should.be('hello');
                 });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.getBytes.bind('').should.throwType(ArgumentException);
+                    file.getBytes.bind(' ').should.throwType(ArgumentException);
+                    file.getBytes.bind('   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the file was not found', {
+                    file.getBytes.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
+                });
             });
 
             describe('getting text from a file', {
@@ -178,6 +246,16 @@ class TestMockFile extends BuddySuite
 
                 it('can read the text from a file', {
                     file.getText('/home/user/documents/file1.txt').should.be('hello');
+                });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.getText.bind('').should.throwType(ArgumentException);
+                    file.getText.bind(' ').should.throwType(ArgumentException);
+                    file.getText.bind('   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the file was not found', {
+                    file.getText.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
                 });
             });
         });

@@ -2,7 +2,10 @@ package sys.io.abstractions.mock;
 
 import haxe.io.BytesBuffer;
 import haxe.io.Bytes;
+import sys.io.abstractions.exceptions.ArgumentException;
+import sys.io.abstractions.exceptions.NotFoundException;
 
+using StringTools;
 using Safety;
 
 /**
@@ -26,8 +29,14 @@ class MockFile implements IFile
      */
     public function create(_path : String)
     {
-        files.set(haxe.io.Path.normalize(_path), MockFileData.fromBytes());
-        directories.push(haxe.io.Path.directory(haxe.io.Path.normalize(_path)));
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        files.set(normalized, MockFileData.fromBytes());
     }
 
     /**
@@ -36,8 +45,19 @@ class MockFile implements IFile
      */
     public function remove(_path : String)
     {
-        files.remove(haxe.io.Path.normalize(_path));
-        directories.remove(haxe.io.Path.directory(haxe.io.Path.normalize(_path)));
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        files.remove(normalized);
     }
 
     /**
@@ -57,11 +77,20 @@ class MockFile implements IFile
      */
     public function writeText(_path : String, _text : String)
     {
-        if (files.exists(haxe.io.Path.normalize(_path)))
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
         {
-            var file = files.get(haxe.io.Path.normalize(_path));
-            file!.setText(_text);
+            throw new ArgumentException('Provided path is only whitespace');
         }
+
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        var file = files.get(normalized);
+        file!.setText(_text);
     }
 
     /**
@@ -71,11 +100,20 @@ class MockFile implements IFile
      */
     public function writeBytes(_path : String, _bytes : Bytes)
     {
-        if (files.exists(haxe.io.Path.normalize(_path)))
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
         {
-            var file = files.get(haxe.io.Path.normalize(_path));
-            file!.setBytes(_bytes);
+            throw new ArgumentException('Provided path is only whitespace');
         }
+
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        var file = files.get(normalized);
+        file!.setBytes(_bytes);
     }
 
     /**
@@ -85,13 +123,22 @@ class MockFile implements IFile
      */
     public function appendText(_path : String, _text : String)
     {
-        if (files.exists(haxe.io.Path.normalize(_path)))
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
         {
-            var file = files.get(haxe.io.Path.normalize(_path));
-            if (file != null)
-            {
-                file.setText(file.text + _text);
-            }
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        var file = files.get(normalized);
+        if (file != null)
+        {
+            file.setText(file.text + _text);
         }
     }
 
@@ -102,17 +149,26 @@ class MockFile implements IFile
      */
     public function appendBytes(_path : String, _bytes : Bytes)
     {
-        if (files.exists(haxe.io.Path.normalize(_path)))
-        {
-            var file = files.get(haxe.io.Path.normalize(_path));
-            if (file != null)
-            {
-                var data = new BytesBuffer();
-                data.add(file.data);
-                data.add(_bytes);
+        var normalized = haxe.io.Path.normalize(_path);
 
-                file.setBytes(data.getBytes());
-            }
+        if (normalized.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        var file = files.get(normalized);
+        if (file != null)
+        {
+            var data = new BytesBuffer();
+            data.add(file.data);
+            data.add(_bytes);
+
+            file.setBytes(data.getBytes());
         }
     }
 
@@ -123,13 +179,20 @@ class MockFile implements IFile
      */
     public function getText(_path : String) : String
     {
-        if (files.exists(haxe.io.Path.normalize(_path)))
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
         {
-            var file = files.get(haxe.io.Path.normalize(_path));
-            return file!.text.or('');
+            throw new ArgumentException('Provided path is only whitespace');
         }
 
-        return '';
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        var file = files.get(normalized);
+        return file!.text.or('');
     }
 
     /**
@@ -139,12 +202,19 @@ class MockFile implements IFile
      */
     public function getBytes(_path : String) : Bytes
     {
-        if (files.exists(haxe.io.Path.normalize(_path)))
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
         {
-            var file = files.get(haxe.io.Path.normalize(_path));
-            return file!.data.or(Bytes.alloc(0));
+            throw new ArgumentException('Provided path is only whitespace');
         }
 
-        return Bytes.alloc(0);
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        var file = files.get(normalized);
+        return file!.data.or(Bytes.alloc(0));
     }
 }
