@@ -1,0 +1,14 @@
+-cp src
+-cp test
+
+-main test.Main
+
+-D analyzer-optimize
+
+-lib buddy
+-lib safety
+
+--macro nullSafety('sys.io.abstractions', Strict)
+--macro Safety.safeNavigation('sys.io.abstractions')
+
+--interp

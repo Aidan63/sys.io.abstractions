@@ -1,0 +1,8 @@
+{
+    "name": "sys.io.abstractions",
+    "license": "MIT",
+    "releasenote": "Initial release",
+    "contributors": [ "Aidan" ],
+    "version": "1.0.0",
+    "classPath": "src"
+}
