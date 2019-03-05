@@ -1,5 +1,7 @@
 package sys.io.abstractions;
 
+import haxe.io.Input;
+import haxe.io.Output;
 import haxe.io.Bytes;
 
 interface IFile
@@ -9,6 +11,10 @@ interface IFile
     function remove(_path : String) : Void;
 
     function exists(_path : String) : Bool;
+
+    function read(_path : String) : Input;
+
+    function write(_path : String) : Output;
 
     function writeText(_path : String, _text : String) : Void;
 

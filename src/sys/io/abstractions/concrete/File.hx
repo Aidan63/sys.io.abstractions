@@ -1,6 +1,8 @@
 package sys.io.abstractions.concrete;
 
 import haxe.io.Bytes;
+import haxe.io.Input;
+import haxe.io.Output;
 import sys.io.abstractions.exceptions.ArgumentException;
 import sys.io.abstractions.exceptions.NotFoundException;
 
@@ -57,6 +59,46 @@ class File implements IFile
     public function exists(_path : String) : Bool
     {
         return sys.FileSystem.exists(_path);
+    }
+
+    /**
+     * //
+     * @param _path //
+     * @return Input
+     */
+    public function read(_path : String) : Input
+    {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
+        return sys.io.File.read(_path);
+    }
+
+    /**
+     * //
+     * @param _path //
+     * @return Output
+     */
+    public function write(_path : String) : Output
+    {
+        if (_path.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_path))
+        {
+            throw new NotFoundException('${_path} not found');
+        }
+
+        return sys.io.File.write(_path);
     }
 
     /**

@@ -1,5 +1,8 @@
 package sys.io.abstractions.mock;
 
+import haxe.io.BytesInput;
+import haxe.io.Output;
+import haxe.io.Input;
 import haxe.io.BytesBuffer;
 import haxe.io.Bytes;
 import sys.io.abstractions.exceptions.ArgumentException;
@@ -73,6 +76,50 @@ class MockFile implements IFile
     /**
      * //
      * @param _path //
+     * @return Input
+     */
+    public function read(_path : String) : Input
+    {
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        return new BytesInput(files.get(normalized).sure().data);
+    }
+
+    /**
+     * //
+     * @param _path //
+     * @return Output
+     */
+    public function write(_path : String) : Output
+    {
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        return new MockFileOutput(files.get(normalized).sure());
+    }
+
+    /**
+     * //
+     * @param _path //
      * @param _text //
      */
     public function writeText(_path : String, _text : String)
@@ -89,8 +136,7 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
-        file!.setText(_text);
+        files.get(normalized).sure().setText(_text);
     }
 
     /**
@@ -112,8 +158,7 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
-        file!.setBytes(_bytes);
+        files.get(normalized).sure().setBytes(_bytes);
     }
 
     /**
@@ -191,8 +236,7 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
-        return file!.text.or('');
+        return files.get(normalized).sure().text;
     }
 
     /**
@@ -214,7 +258,30 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
-        return file!.data.or(Bytes.alloc(0));
+        return files.get(normalized).sure().data;
+    }
+}
+
+private class MockFileOutput extends Output
+{
+    final file : MockFileData;
+
+    final buffer : BytesBuffer;
+
+    public function new(_file : MockFileData)
+    {
+        file   = _file;
+        buffer = new BytesBuffer();
+        buffer.addBytes(file.data, 0, file.data.length);
+    }
+
+    override function writeByte(_byte : Int)
+    {
+        buffer.addByte(_byte);
+    }
+
+    override function close()
+    {
+        file.setBytes(buffer.getBytes());
     }
 }
