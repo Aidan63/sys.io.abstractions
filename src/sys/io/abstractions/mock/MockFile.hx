@@ -136,8 +136,7 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
-        file!.setText(_text);
+        files.get(normalized).sure().setText(_text);
     }
 
     /**
@@ -159,8 +158,7 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
-        file!.setBytes(_bytes);
+        files.get(normalized).sure().setBytes(_bytes);
     }
 
     /**
@@ -238,8 +236,7 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
-        return file!.text.or('');
+        return files.get(normalized).sure().text;
     }
 
     /**
@@ -261,8 +258,7 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
-        return file!.data.or(Bytes.alloc(0));
+        return files.get(normalized).sure().data;
     }
 }
 
