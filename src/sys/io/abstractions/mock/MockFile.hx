@@ -1,5 +1,8 @@
 package sys.io.abstractions.mock;
 
+import haxe.io.BytesInput;
+import haxe.io.Output;
+import haxe.io.Input;
 import haxe.io.BytesBuffer;
 import haxe.io.Bytes;
 import sys.io.abstractions.exceptions.ArgumentException;
@@ -68,6 +71,50 @@ class MockFile implements IFile
     public function exists(_path : String) : Bool
     {
         return files.exists(haxe.io.Path.normalize(_path));
+    }
+
+    /**
+     * //
+     * @param _path //
+     * @return Input
+     */
+    public function read(_path : String) : Input
+    {
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        return new BytesInput(files.get(normalized).sure().data);
+    }
+
+    /**
+     * //
+     * @param _path //
+     * @return Output
+     */
+    public function write(_path : String) : Output
+    {
+        var normalized = haxe.io.Path.normalize(_path);
+
+        if (normalized.trim().length == 0)
+        {
+            throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        if (!exists(normalized))
+        {
+            throw new NotFoundException('${normalized} not found');
+        }
+
+        return new MockFileOutput(files.get(normalized).sure());
     }
 
     /**
@@ -216,5 +263,29 @@ class MockFile implements IFile
 
         var file = files.get(normalized);
         return file!.data.or(Bytes.alloc(0));
+    }
+}
+
+private class MockFileOutput extends Output
+{
+    final file : MockFileData;
+
+    final buffer : BytesBuffer;
+
+    public function new(_file : MockFileData)
+    {
+        file   = _file;
+        buffer = new BytesBuffer();
+        buffer.addBytes(file.data, 0, file.data.length);
+    }
+
+    override function writeByte(_byte : Int)
+    {
+        buffer.addByte(_byte);
+    }
+
+    override function close()
+    {
+        file.setBytes(buffer.getBytes());
     }
 }
