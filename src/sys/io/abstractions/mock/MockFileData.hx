@@ -7,7 +7,6 @@ using Safety;
 /**
  * Mock file which stores byte and string data.
  */
-@:nullSafety
 class MockFileData
 {
     /**

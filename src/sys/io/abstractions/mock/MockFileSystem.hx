@@ -19,6 +19,5 @@ class MockFileSystem implements IFileSystem
         
         directory  = new MockDirectory(files, directories);
         file       = new MockFile(files, directories);
-        path       = new Path();
     }
 }
