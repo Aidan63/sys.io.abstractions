@@ -95,6 +95,52 @@ class TestMockFile extends BuddySuite
                 });
             });
 
+            describe('stream writing to a file', {
+                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('data ') ];
+                var file = new MockFile(f, []);
+
+                it('allows stream writing to the file', {
+                    var output = file.write('/home/user/documents/file1.txt');
+                    output.writeString('hello ');
+                    output.writeString('world!');
+                    output.close();
+
+                    f.get('/home/user/documents/file1.txt').text.should.be('data hello world!');
+                });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.write.bind('').should.throwType(ArgumentException);
+                    file.write.bind(' ').should.throwType(ArgumentException);
+                    file.write.bind('   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the file was not found', {
+                    file.write.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
+                });
+            });
+
+            describe('stream reading from a file', {
+                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('data hello world!') ];
+                var file = new MockFile(f, []);
+
+                it('allows stream reading from the file', {
+                    var input = file.read('/home/user/documents/file1.txt');
+                    input.readString(5).should.be('data ');
+                    input.readString(6).should.be('hello ');
+                    input.readString(6).should.be('world!');
+                });
+
+                it('will throw an argument exception when passed whitespace for the path', {
+                    file.write.bind('').should.throwType(ArgumentException);
+                    file.write.bind(' ').should.throwType(ArgumentException);
+                    file.write.bind('   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the file was not found', {
+                    file.write.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
+                });
+            });
+
             describe('writing text to a file', {
                 var f = [
                     '/home/user/documents/file1.txt' => MockFileData.fromText('file 1'),
