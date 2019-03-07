@@ -12,12 +12,18 @@ using StringTools;
 using Safety;
 
 /**
- * //
+ * Mock file class for easy testing.
  */
 class MockFile implements IFile
 {
+    /**
+     * All files and their path in the mock file system.
+     */
     final files : Map<String, MockFileData>;
 
+    /**
+     * Exising directories which may not have files in them.
+     */
     final directories : Array<String>;
 
     public function new(_file : Map<String, MockFileData>, _directories : Array<String>)
@@ -285,6 +291,10 @@ class MockFile implements IFile
     }
 }
 
+/**
+ * Custom output stream for mock files.
+ * Copies existing file bytes into a bytes buffer and copies the new bytes into the file when closing.
+ */
 private class MockFileOutput extends Output
 {
     final file : MockFileData;

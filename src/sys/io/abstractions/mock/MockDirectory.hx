@@ -11,8 +11,14 @@ using StringTools;
  */
 class MockDirectory implements IDirectory
 {
+    /**
+     * All files and their path in the mock file system.
+     */
     final files : Map<String, MockFileData>;
 
+    /**
+     * Exising directories which may not have files in them.
+     */
     final directories : Array<String>;
 
     public function new(_files : Map<String, MockFileData>, _directories : Array<String>)
