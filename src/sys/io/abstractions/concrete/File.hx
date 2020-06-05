@@ -281,6 +281,5 @@ class File implements IFile
         }
 
         sys.io.File.copy(_src, _dst);
-        sys.FileSystem.deleteFile(_src);
     }
 }
