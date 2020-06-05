@@ -28,8 +28,10 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: xUnit
-    testResultsFiles: test-results.xml
+    testResultsFiles: Test-Results-$AGENT_OS.xml
     searchFolder: $(Build.SourcesDirectory)
     testRunTitle: $(Agent.OS) Tests
     buildPlatform: $(Agent.OS)
     failTaskOnFailedTests: true
+  env:
+    AGENT_OS: $(Agent.OS)
