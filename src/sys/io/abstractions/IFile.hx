@@ -104,4 +104,22 @@ interface IFile
      * @throws NotFoundException If the file does not exist. 
      */
     function getBytes(_path : String) : Bytes;
+
+    /**
+     * Move a file to another location.
+     * @param _src File to move.
+     * @param _dst Destination to copy to.
+     * @throws ArgumentException If the provided path is whitespace.
+     * @throws NotFoundException If the source file does not exist.
+     */
+    function move(_src : String, _dst : String) : Void;
+
+    /**
+     * Copy the contents of a file to another file.
+     * @param _src File to read from.
+     * @param _dst File to copy to.
+     * @throws ArgumentException If the provided path is whitespace.
+     * @throws NotFoundException If the source file does not exist.
+     */
+    function copy(_src : String, _dst : String) : Void;
 }

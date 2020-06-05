@@ -289,6 +289,65 @@ class MockFile implements IFile
 
         return files.get(normalized).sure().data;
     }
+
+    /**
+     * Move a file to another location.
+     * @param _src File to move.
+     * @param _dst Destination to copy to.
+     * @throws ArgumentException If the provided path is whitespace.
+     * @throws NotFoundException If the source file does not exist.
+     */
+    public function move(_src : String, _dst : String)
+    {
+        final src = haxe.io.Path.normalize(_src);
+        final dst = haxe.io.Path.normalize(_dst);
+
+        if (src.trim().length == 0)
+        {
+            throw new ArgumentException('Source path is only whitespace');
+        }
+        if (dst.trim().length == 0)
+        {
+            throw new ArgumentException('Destination path is only whitespace');
+        }
+
+        if (!exists(src))
+        {
+            throw new NotFoundException('$src not found');
+        }
+
+        files.set(dst, files.get(src).sure());
+        files.remove(src);
+    }
+
+    /**
+     * Copy the contents of a file to another file.
+     * @param _src File to read from.
+     * @param _dst File to copy to.
+     * @throws ArgumentException If the provided path is whitespace.
+     * @throws NotFoundException If the source file does not exist.
+     */
+    public function copy(_src : String, _dst : String)
+    {
+        final src = haxe.io.Path.normalize(_src);
+        final dst = haxe.io.Path.normalize(_dst);
+
+        if (src.trim().length == 0)
+        {
+            throw new ArgumentException('Source path is only whitespace');
+        }
+        if (dst.trim().length == 0)
+        {
+            throw new ArgumentException('Destination path is only whitespace');
+        }
+
+        if (!exists(src))
+        {
+            throw new NotFoundException('$src not found');
+        }
+
+        files.set(dst, MockFileData.fromBytes(files.get(src).sure().data));
+    }
 }
 
 /**

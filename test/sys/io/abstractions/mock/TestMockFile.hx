@@ -304,6 +304,58 @@ class TestMockFile extends BuddySuite
                     file.getText.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
                 });
             });
+
+            describe('moving a file', {
+                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
+                var d = [];
+                var file = new MockFile(f, d);
+
+                it('can move a file to another location', {
+                    file.move('/home/user/documents/file1.txt', '/home/user/moved.txt');
+                    file.getText('/home/user/moved.txt').should.be('hello');
+                    file.exists('/home/user/documents/file1.txt').should.be(false);
+                });
+
+                it('will throw an argument exception when passed whitespace for the source or destination path', {
+                    file.move.bind('', 'dst.txt').should.throwType(ArgumentException);
+                    file.move.bind(' ', 'dst.txt').should.throwType(ArgumentException);
+                    file.move.bind('   ', 'dst.txt').should.throwType(ArgumentException);
+
+                    file.move.bind('src.txt', '').should.throwType(ArgumentException);
+                    file.move.bind('src.txt', ' ').should.throwType(ArgumentException);
+                    file.move.bind('src.txt', '   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the source file was not found', {
+                    file.move.bind('/home/user/does_not_exist.txt', 'dst.txt').should.throwType(NotFoundException);
+                });
+            });
+
+            describe('copying a file', {
+                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
+                var d = [];
+                var file = new MockFile(f, d);
+
+                it('can move a file to another location', {
+                    file.copy('/home/user/documents/file1.txt', '/home/user/moved.txt');
+                    file.getText('/home/user/moved.txt').should.be('hello');
+                    file.getText('/home/user/documents/file1.txt').should.be('hello');
+                });
+
+                it('will throw an argument exception when passed whitespace for the source or destination path', {
+                    file.copy.bind('', 'dst.txt').should.throwType(ArgumentException);
+                    file.copy.bind(' ', 'dst.txt').should.throwType(ArgumentException);
+                    file.copy.bind('   ', 'dst.txt').should.throwType(ArgumentException);
+
+                    file.copy.bind('src.txt', '').should.throwType(ArgumentException);
+                    file.copy.bind('src.txt', ' ').should.throwType(ArgumentException);
+                    file.copy.bind('src.txt', '   ').should.throwType(ArgumentException);
+                });
+
+                it('will thrown a not found exception if the source file was not found', {
+                    file.copy.bind('/home/user/does_not_exist.txt', 'dst.txt').should.throwType(NotFoundException);
+                });
+            });
         });
     }
 }

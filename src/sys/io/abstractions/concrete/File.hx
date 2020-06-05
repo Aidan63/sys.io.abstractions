@@ -247,4 +247,58 @@ class File implements IFile
 
         return sys.io.File.getBytes(_path);
     }
+
+    /**
+     * Move a file to another location.
+     * @param _src File to move.
+     * @param _dst Destination to copy to.
+     * @throws ArgumentException If the provided path is whitespace.
+     * @throws NotFoundException If the source file does not exist.
+     */
+    public function move(_src : String, _dst : String)
+    {
+        if (_src.trim().length == 0)
+        {
+            throw new ArgumentException('Source path is only whitespace');
+        }
+        if (_dst.trim().length == 0)
+        {
+            throw new ArgumentException('Destination path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_src))
+        {
+            throw new NotFoundException('$_src not found');
+        }
+
+        sys.io.File.copy(_src, _dst);
+        sys.FileSystem.deleteFile(_src);
+    }
+
+    /**
+     * Copy the contents of a file to another file.
+     * @param _src File to read from.
+     * @param _dst File to copy to.
+     * @throws ArgumentException If the provided path is whitespace.
+     * @throws NotFoundException If the source file does not exist.
+     */
+    public function copy(_src : String, _dst : String)
+    {
+        if (_src.trim().length == 0)
+        {
+            throw new ArgumentException('Source path is only whitespace');
+        }
+        if (_dst.trim().length == 0)
+        {
+            throw new ArgumentException('Destination path is only whitespace');
+        }
+
+        if (!sys.FileSystem.exists(_src))
+        {
+            throw new NotFoundException('$_src not found');
+        }
+
+        sys.io.File.copy(_src, _dst);
+        sys.FileSystem.deleteFile(_src);
+    }
 }

@@ -4,5 +4,8 @@
     "releasenote": "Initial release",
     "contributors": [ "Aidan" ],
     "version": "1.0.0",
-    "classPath": "src"
+    "classPath": "src",
+    "dependencies": {
+        "safety" : "1.1.2"
+    }
 }

@@ -1,11 +1,11 @@
 strategy:
   matrix:
     linux:
-      imageName: 'ubuntu-16.04'
+      imageName: 'ubuntu-latest'
     mac:
-      imageName: 'macos-10.13'
+      imageName: 'macos-latest'
     windows:
-      imageName: 'vs2017-win2016'
+      imageName: 'windows-latest'
 
 pool:
   vmImage: $(imageName)
@@ -16,11 +16,11 @@ steps:
     versionSpec: '10.15.x'
 
 - script: |
-    npm install git+https://git@github.com/starburst997/lix.client.git --global
+    npm install lix
 
-    lix download
+    npx lix download
 
-    haxe test.hxml -D reporter=test.XUnit2Reporter -D report-name=Test-Results-$AGENT_OS
+    npx haxe test.hxml -D reporter=test.XUnit2Reporter -D report-name=Test-Results-$AGENT_OS
   displayName: Run Tests
   env:
     AGENT_OS: $(Agent.OS)
