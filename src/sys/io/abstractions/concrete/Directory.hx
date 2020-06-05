@@ -1,5 +1,6 @@
 package sys.io.abstractions.concrete;
 
+import haxe.io.Path;
 import sys.io.abstractions.exceptions.ArgumentException;
 import sys.io.abstractions.exceptions.NotFoundException;
 
@@ -40,6 +41,20 @@ class Directory implements IDirectory
         if (_path.trim().length == 0)
         {
             throw new ArgumentException('Provided path is only whitespace');
+        }
+
+        for (item in sys.FileSystem.readDirectory(_path))
+        {
+            final path = Path.join([ _path, item ]);
+
+            if (sys.FileSystem.isDirectory(path))
+            {
+                remove(path);
+            }
+            else
+            {
+                sys.FileSystem.deleteFile(path);
+            }
         }
 
         sys.FileSystem.deleteDirectory(_path);
