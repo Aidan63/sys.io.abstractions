@@ -6,6 +6,7 @@ import sys.io.abstractions.exceptions.ArgumentException;
 import sys.io.abstractions.exceptions.NotFoundException;
 
 using buddy.Should;
+using Safety;
 
 class TestMockFile extends BuddySuite
 {
@@ -68,8 +69,8 @@ class TestMockFile extends BuddySuite
                     file.remove.bind('   ').should.throwType(ArgumentException);
                 });
 
-                it('will thrown a not found exception if the file was not found', {
-                    file.remove.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
+                it('will will perform no operation if the file does not exist', {
+                    file.remove('/home/user/does_not_exist.txt');
                 });
             });
 
@@ -174,7 +175,8 @@ class TestMockFile extends BuddySuite
                 });
 
                 it('will thrown a not found exception if the file was not found', {
-                    file.writeText.bind('/home/user/does_not_exist.txt', '').should.throwType(NotFoundException);
+                    file.writeText('/home/user/does_not_exist.txt', '');
+                    f.get('/home/user/does_not_exist.txt').sure();
                 });
             });
 
@@ -208,8 +210,9 @@ class TestMockFile extends BuddySuite
                     file.writeBytes.bind('   ', Bytes.alloc(0)).should.throwType(ArgumentException);
                 });
 
-                it('will thrown a not found exception if the file was not found', {
-                    file.writeBytes.bind('/home/user/does_not_exist.txt', Bytes.alloc(0)).should.throwType(NotFoundException);
+                it('will create the file if it does not already exist', {
+                    file.writeBytes('/home/user/does_not_exist.txt', Bytes.alloc(0));
+                    f.get('/home/user/does_not_exist.txt').sure();
                 });
             });
 

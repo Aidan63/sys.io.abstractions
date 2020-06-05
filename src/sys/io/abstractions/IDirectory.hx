@@ -17,7 +17,6 @@ interface IDirectory
      * Recursively remove a directory from the file system.
      * @param _path Directory to remove.
      * @throws ArgumentException If the provided path if whitespace.
-     * @throws NotFoundException If the directory does not exist.
      */
     function remove(_path : String) : Void;
 

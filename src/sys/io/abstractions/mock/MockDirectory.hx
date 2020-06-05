@@ -81,7 +81,6 @@ class MockDirectory implements IDirectory
      * Recursively remove a directory from the file system.
      * @param _path Directory to remove.
      * @throws ArgumentException If the provided path if whitespace.
-     * @throws NotFoundException If the directory does not exist.
      */
     public function remove(_path : String)
     {
@@ -122,11 +121,6 @@ class MockDirectory implements IDirectory
         {
             files.remove(path);
             totalRemoved++;
-        }
-
-        if (totalRemoved == 0)
-        {
-            throw new NotFoundException('Directory ${normalized} not found');
         }
     }
 

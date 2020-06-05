@@ -40,18 +40,12 @@ class File implements IFile
      * Removes a file from the hard drive.
      * @param _path File to remove.
      * @throws ArgumentException If the provided path if whitespace.
-     * @throws NotFoundException If the file does not exist.
      */
     public function remove(_path : String)
     {
         if (_path.trim().length == 0)
         {
             throw new ArgumentException('Provided path is only whitespace');
-        }
-
-        if (!sys.FileSystem.exists(_path))
-        {
-            throw new NotFoundException('${_path} not found');
         }
 
         sys.FileSystem.deleteFile(_path);
@@ -117,18 +111,12 @@ class File implements IFile
      * @param _path File to write to.
      * @param _text String for the file.
      * @throws ArgumentException If the provided path if whitespace.
-     * @throws NotFoundException If the file does not exist.
      */
     public function writeText(_path : String, _text : String)
     {
         if (_path.trim().length == 0)
         {
             throw new ArgumentException('Provided path is only whitespace');
-        }
-
-        if (!sys.FileSystem.exists(_path))
-        {
-            throw new NotFoundException('${_path} not found');
         }
 
         sys.io.File.saveContent(_path, _text);
@@ -139,18 +127,12 @@ class File implements IFile
      * @param _path File to write to.
      * @param _bytes Bytes for the file.
      * @throws ArgumentException If the provided path if whitespace.
-     * @throws NotFoundException If the file does not exist. 
      */
     public function writeBytes(_path : String, _bytes : Bytes)
     {
         if (_path.trim().length == 0)
         {
             throw new ArgumentException('Provided path is only whitespace');
-        }
-
-        if (!sys.FileSystem.exists(_path))
-        {
-            throw new NotFoundException('${_path} not found');
         }
 
         sys.io.File.saveBytes(_path, _bytes);

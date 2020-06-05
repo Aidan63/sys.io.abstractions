@@ -21,7 +21,6 @@ interface IFile
      * Removes a file from the hard drive.
      * @param _path File to remove.
      * @throws ArgumentException If the provided path if whitespace.
-     * @throws NotFoundException If the file does not exist.
      */
     function remove(_path : String) : Void;
 
@@ -56,7 +55,6 @@ interface IFile
      * @param _path File to write to.
      * @param _text String for the file.
      * @throws ArgumentException If the provided path if whitespace.
-     * @throws NotFoundException If the file does not exist.
      */
     function writeText(_path : String, _text : String) : Void;
 
@@ -65,7 +63,6 @@ interface IFile
      * @param _path File to write to.
      * @param _bytes Bytes for the file.
      * @throws ArgumentException If the provided path if whitespace.
-     * @throws NotFoundException If the file does not exist. 
      */
     function writeBytes(_path : String, _bytes : Bytes) : Void;
 

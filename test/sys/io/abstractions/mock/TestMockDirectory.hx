@@ -93,8 +93,8 @@ class TestMockDirectory extends BuddySuite
                     directories.remove.bind('   ').should.throwType(ArgumentException);
                 });
 
-                it('will thrown a not found exception if the directory was not found', {
-                    directories.remove.bind('/home/user/does_not_exist').should.throwType(NotFoundException);
+                it('will perform no operation if the directory does not exist', {
+                    directories.remove('/home/user/does_not_exist');
                 });
             });
 

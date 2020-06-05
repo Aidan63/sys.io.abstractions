@@ -34,18 +34,12 @@ class Directory implements IDirectory
      * Recursively remove a directory from the file system.
      * @param _path Directory to remove.
      * @throws ArgumentException If the provided path if whitespace.
-     * @throws NotFoundException If the directory does not exist.
      */
     public function remove(_path : String)
     {
         if (_path.trim().length == 0)
         {
             throw new ArgumentException('Provided path is only whitespace');
-        }
-
-        if (!sys.FileSystem.exists(_path))
-        {
-            throw new NotFoundException('${_path} not found');
         }
 
         sys.FileSystem.deleteDirectory(_path);

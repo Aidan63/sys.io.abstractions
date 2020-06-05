@@ -67,11 +67,6 @@ class MockFile implements IFile
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        if (!exists(normalized))
-        {
-            throw new NotFoundException('${normalized} not found');
-        }
-
         files.remove(normalized);
     }
 
@@ -150,12 +145,7 @@ class MockFile implements IFile
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        if (!exists(normalized))
-        {
-            throw new NotFoundException('${normalized} not found');
-        }
-
-        files.get(normalized).sure().setText(_text);
+        files.set(normalized, MockFileData.fromText(_text));
     }
 
     /**
@@ -174,12 +164,7 @@ class MockFile implements IFile
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        if (!exists(normalized))
-        {
-            throw new NotFoundException('${normalized} not found');
-        }
-
-        files.get(normalized).sure().setBytes(_bytes);
+        files.set(normalized, MockFileData.fromBytes(_bytes));
     }
 
     /**
