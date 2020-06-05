@@ -157,7 +157,7 @@ class File implements IFile
             throw new NotFoundException('${_path} not found');
         }
 
-        var out = sys.io.File.append(_path, false);
+        final out = sys.io.File.append(_path, false);
         out.writeString(_text);
         out.close();
     }
@@ -181,7 +181,7 @@ class File implements IFile
             throw new NotFoundException('${_path} not found');
         }
 
-        var out = sys.io.File.append(_path);
+        final out = sys.io.File.append(_path);
         out.writeBytes(_bytes, 0, _bytes.length);
         out.close();
     }

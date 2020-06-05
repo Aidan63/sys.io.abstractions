@@ -17,12 +17,12 @@ class TestMockDirectory extends BuddySuite
 
         describe('TestMockDirectory', {
             describe('checking for a directory', {
-                var f = [
+                final f = [
                     '/home/user/documents/file1.txt' => MockFileData.fromBytes(),
                     '/home/user/documents/some/other/file2.txt' => MockFileData.fromBytes()
                 ];
-                var d = [ '/media/user/archive/' ];
-                var directories = new MockDirectory(f, d);
+                final d = [ '/media/user/archive/' ];
+                final directories = new MockDirectory(f, d);
 
                 it('can detect explicitly defined directories', {
                     directories.exist('/media/user').should.be(true);
@@ -46,8 +46,8 @@ class TestMockDirectory extends BuddySuite
             });
 
             describe('creating a directory', {
-                var d = [];
-                var directories = new MockDirectory([], d);
+                final d = [];
+                final directories = new MockDirectory([], d);
 
                 it('can add a new directory', {
                     directories.create('/home/user/documents/some/');
@@ -72,13 +72,13 @@ class TestMockDirectory extends BuddySuite
             });
 
             describe('removing a directory', {
-                var f = [
+                final f = [
                     '/home/user/documents/file1.txt' => MockFileData.fromText(),
                     '/home/user/documents/folder/file.txt' => MockFileData.fromText(),
                     '/home/user/file3.txt' => MockFileData.fromText()
                 ];
-                var d = [ '/home/user/documents/folder/other/', '/media/user/archive/pictures' ];
-                var directories = new MockDirectory(f, d);
+                final d = [ '/home/user/documents/folder/other/', '/media/user/archive/pictures' ];
+                final directories = new MockDirectory(f, d);
 
                 it('can remove a directory and all sub directories and files', {
                     directories.remove('/home/user/documents');
@@ -99,14 +99,14 @@ class TestMockDirectory extends BuddySuite
             });
 
             describe('reading a directory', {
-                var f = [
+                final f = [
                     '/home/user/documents/file1.txt' => MockFileData.fromText(),
                     '/home/user/documents/folder/file2.txt' => MockFileData.fromText(),
                     '/home/user/documents/folder/file3.txt' => MockFileData.fromText(),
                     '/home/user/file4.txt' => MockFileData.fromText()
                 ];
-                var d = [ '/home/user/documents/folder/other/', '/media/user/archive/pictures' ];
-                var directories = new MockDirectory(f, d);
+                final d = [ '/home/user/documents/folder/other/', '/media/user/archive/pictures' ];
+                final directories = new MockDirectory(f, d);
 
                 it('can fetch a files of all files and directories within a directory', {
                     directories.read('/home/user/documents').should.containAll([ '/home/user/documents/file1.txt', '/home/user/documents/folder' ]);
@@ -128,14 +128,14 @@ class TestMockDirectory extends BuddySuite
             });
 
             describe('detecting if a path is a directory', {
-                var f = [
+                final f = [
                     '/home/user/documents/file1.txt' => MockFileData.fromText(),
                     '/home/user/documents/folder/file2.txt' => MockFileData.fromText(),
                     '/home/user/documents/folder/file3.txt' => MockFileData.fromText(),
                     '/home/user/file4.txt' => MockFileData.fromText()
                 ];
-                var d = [ '/home/user/documents/folder/other/', '/media/user/archive/pictures' ];
-                var directories = new MockDirectory(f, d);
+                final d = [ '/home/user/documents/folder/other/', '/media/user/archive/pictures' ];
+                final directories = new MockDirectory(f, d);
 
                 it('will return if a path is a directory', {
                     directories.isDirectory('/home/user/documents/file1.txt').should.be(false);

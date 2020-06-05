@@ -39,7 +39,7 @@ class MockFile implements IFile
      */
     public function create(_path : String)
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {
@@ -60,7 +60,7 @@ class MockFile implements IFile
      */
     public function remove(_path : String)
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {
@@ -89,7 +89,7 @@ class MockFile implements IFile
      */
     public function read(_path : String) : Input
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {
@@ -114,7 +114,7 @@ class MockFile implements IFile
      */
     public function write(_path : String) : Output
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {
@@ -138,7 +138,7 @@ class MockFile implements IFile
      */
     public function writeText(_path : String, _text : String)
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {
@@ -157,7 +157,7 @@ class MockFile implements IFile
      */
     public function writeBytes(_path : String, _bytes : Bytes)
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {
@@ -176,7 +176,7 @@ class MockFile implements IFile
      */
     public function appendText(_path : String, _text : String)
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {
@@ -188,7 +188,7 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
+        final file = files.get(normalized);
         if (file != null)
         {
             file.setText(file.text + _text);
@@ -204,7 +204,7 @@ class MockFile implements IFile
      */
     public function appendBytes(_path : String, _bytes : Bytes)
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {
@@ -216,10 +216,10 @@ class MockFile implements IFile
             throw new NotFoundException('${normalized} not found');
         }
 
-        var file = files.get(normalized);
+        final file = files.get(normalized);
         if (file != null)
         {
-            var data = new BytesBuffer();
+            final data = new BytesBuffer();
             data.add(file.data);
             data.add(_bytes);
 
@@ -236,7 +236,7 @@ class MockFile implements IFile
      */
     public function getText(_path : String) : String
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {
@@ -260,7 +260,7 @@ class MockFile implements IFile
      */
     public function getBytes(_path : String) : Bytes
     {
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (normalized.trim().length == 0)
         {

@@ -39,7 +39,7 @@ class MockDirectory implements IDirectory
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         for (directory in directories)
         {
@@ -72,7 +72,7 @@ class MockDirectory implements IDirectory
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        var normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
+        final normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
 
         directories.push(normalized);
     }
@@ -89,11 +89,11 @@ class MockDirectory implements IDirectory
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        var normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
+        final normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
 
         var totalRemoved = 0;
         
-        var toRemove = [];
+        final toRemove = [];
         for (directory in directories)
         {
             if (directory.startsWith(normalized))
@@ -108,7 +108,7 @@ class MockDirectory implements IDirectory
             totalRemoved++;
         }
 
-        var toRemove = [];
+        final toRemove = [];
         for (path in files.keys())
         {
             if (path.startsWith(normalized))
@@ -138,12 +138,12 @@ class MockDirectory implements IDirectory
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        var output    = [];
-        var normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
+        final output    = [];
+        final normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
 
         if (!exist(normalized))
         {
-            throw new NotFoundException('Directory ${normalized} does not exist');
+            throw new NotFoundException('Directory $normalized does not exist');
         }
 
         for (directory in directories)
@@ -187,11 +187,11 @@ class MockDirectory implements IDirectory
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        var normalized = haxe.io.Path.normalize(_path);
+        final normalized = haxe.io.Path.normalize(_path);
 
         if (!exist(normalized) && !files.exists(normalized))
         {
-            throw new NotFoundException('${normalized} is not a file or directory');
+            throw new NotFoundException('$normalized is not a file or directory');
         }
 
         return !files.exists(normalized);

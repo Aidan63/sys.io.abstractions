@@ -14,14 +14,15 @@ class TestMockFile extends BuddySuite
     {
         describe('TestMockFile', {
             describe('creating a file', {
-                var f : Map<String, MockFileData> = [];
-                var d : Array<String> = [];
-                var file = new MockFile(f, d);
+                final f : Map<String, MockFileData> = [];
+                final d : Array<String> = [];
+                final file = new MockFile(f, d);
 
                 it('can create a new empty file', {
                     file.create('/home/user/documents/file1.txt');
                     f.exists('/home/user/documents/file1.txt').should.be(true);
-                    var file = f.get('/home/user/documents/file1.txt');
+
+                    final file = f.get('/home/user/documents/file1.txt');
                     if (file != null)
                     {
                         file.data.length.should.be(0);
@@ -31,7 +32,8 @@ class TestMockFile extends BuddySuite
                 it('will normalize the path and create a new empty file', {
                     file.create('/home/user/documents/folder/../file2.txt');
                     f.exists('/home/user/documents/file2.txt').should.be(true);
-                    var file = f.get('/home/user/documents/file1.txt');
+
+                    final file = f.get('/home/user/documents/file1.txt');
                     if (file != null)
                     {
                         file.data.length.should.be(0);
@@ -46,12 +48,12 @@ class TestMockFile extends BuddySuite
             });
 
             describe('removing a file', {
-                var f = [
+                final f = [
                     '/home/user/documents/file1.txt' => MockFileData.fromBytes(),
                     '/home/user/documents/file2.txt' => MockFileData.fromBytes()
                 ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('can remove an existing file', {
                     file.remove('/home/user/documents/file1.txt');
@@ -75,12 +77,12 @@ class TestMockFile extends BuddySuite
             });
 
             describe('checking if a file exists', {
-                var f = [
+                final f = [
                     '/home/user/documents/file1.txt' => MockFileData.fromText('file 1'),
                     '/home/user/documents/file2.txt' => MockFileData.fromText('file 2')
                 ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('will return true if the file is found', {
                     file.exists('/home/user/documents/file1.txt').should.be(true);
@@ -97,11 +99,11 @@ class TestMockFile extends BuddySuite
             });
 
             describe('stream writing to a file', {
-                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('data ') ];
-                var file = new MockFile(f, []);
+                final f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('data ') ];
+                final file = new MockFile(f, []);
 
                 it('allows stream writing to the file', {
-                    var output = file.write('/home/user/documents/file1.txt');
+                    final output = file.write('/home/user/documents/file1.txt');
                     output.writeString('hello ');
                     output.writeString('world!');
                     output.close();
@@ -121,11 +123,11 @@ class TestMockFile extends BuddySuite
             });
 
             describe('stream reading from a file', {
-                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('data hello world!') ];
-                var file = new MockFile(f, []);
+                final f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('data hello world!') ];
+                final file = new MockFile(f, []);
 
                 it('allows stream reading from the file', {
-                    var input = file.read('/home/user/documents/file1.txt');
+                    final input = file.read('/home/user/documents/file1.txt');
                     input.readString(5).should.be('data ');
                     input.readString(6).should.be('hello ');
                     input.readString(6).should.be('world!');
@@ -143,24 +145,24 @@ class TestMockFile extends BuddySuite
             });
 
             describe('writing text to a file', {
-                var f = [
+                final f = [
                     '/home/user/documents/file1.txt' => MockFileData.fromText('file 1'),
                     '/home/user/documents/file2.txt' => MockFileData.fromText('file 2')
                 ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('can set the file contents to a string', {
                     file.writeText('/home/user/documents/file1.txt', 'hello');
                     file.writeText('/home/user/documents/folder/../file2.txt', 'world');
 
-                    var file1 = f.get('/home/user/documents/file1.txt');
+                    final file1 = f.get('/home/user/documents/file1.txt');
                     if (file1 != null)
                     {
                         file1.data.length.should.be(5);
                         file1.text.should.be('hello');
                     }
-                    var file2 = f.get('/home/user/documents/file2.txt');
+                    final file2 = f.get('/home/user/documents/file2.txt');
                     if (file2 != null)
                     {
                         file2.data.length.should.be(5);
@@ -181,23 +183,23 @@ class TestMockFile extends BuddySuite
             });
 
             describe('writing bytes to a file', {
-                var f = [
+                final f = [
                     '/home/user/documents/file1.txt' => MockFileData.fromText('file 1'),
                     '/home/user/documents/file2.txt' => MockFileData.fromText('file 2')
                 ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('can set the file contents to a bytes', {
                     file.writeBytes('/home/user/documents/file1.txt', Bytes.alloc(10));
                     file.writeBytes('/home/user/documents/folder/../file2.txt', Bytes.alloc(12));
 
-                    var file1 = f.get('/home/user/documents/file1.txt');
+                    final file1 = f.get('/home/user/documents/file1.txt');
                     if (file1 != null)
                     {
                         file1.data.length.should.be(10);
                     }
-                    var file2 = f.get('/home/user/documents/file2.txt');
+                    final file2 = f.get('/home/user/documents/file2.txt');
                     if (file2 != null)
                     {
                         file2.data.length.should.be(12);
@@ -217,14 +219,14 @@ class TestMockFile extends BuddySuite
             });
 
             describe('appending text to a file', {
-                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('can append a string to a files data', {
                     file.appendText('/home/user/documents/file1.txt', 'world');
 
-                    var file = f.get('/home/user/documents/file1.txt');
+                    final file = f.get('/home/user/documents/file1.txt');
                     if (file != null)
                     {
                         file.text.should.be('helloworld');
@@ -243,14 +245,14 @@ class TestMockFile extends BuddySuite
             });
 
             describe('appending bytes to a file', {
-                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('can append a string to a files data', {
                     file.appendBytes('/home/user/documents/file1.txt', Bytes.ofString('world'));
 
-                    var file = f.get('/home/user/documents/file1.txt');
+                    final file = f.get('/home/user/documents/file1.txt');
                     if (file != null)
                     {
                         file.text.should.be('helloworld');
@@ -269,9 +271,9 @@ class TestMockFile extends BuddySuite
             });
 
             describe('getting bytes from a file', {
-                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('can read the bytes from a file', {
                     file.getBytes('/home/user/documents/file1.txt').toString().should.be('hello');
@@ -289,9 +291,9 @@ class TestMockFile extends BuddySuite
             });
 
             describe('getting text from a file', {
-                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('can read the text from a file', {
                     file.getText('/home/user/documents/file1.txt').should.be('hello');
@@ -309,9 +311,9 @@ class TestMockFile extends BuddySuite
             });
 
             describe('moving a file', {
-                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('can move a file to another location', {
                     file.move('/home/user/documents/file1.txt', '/home/user/moved.txt');
@@ -335,9 +337,9 @@ class TestMockFile extends BuddySuite
             });
 
             describe('copying a file', {
-                var f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
-                var d = [];
-                var file = new MockFile(f, d);
+                final f = [ '/home/user/documents/file1.txt' => MockFileData.fromText('hello') ];
+                final d = [];
+                final file = new MockFile(f, d);
 
                 it('can move a file to another location', {
                     file.copy('/home/user/documents/file1.txt', '/home/user/moved.txt');
