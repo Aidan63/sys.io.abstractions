@@ -1,14 +1,12 @@
--cp src
--cp test
-
--main test.Main
+-p src
+-p test
 
 -D analyzer-optimize
 
--lib buddy
--lib safety
+-L buddy
+-L safety
 
 --macro nullSafety('sys.io.abstractions', Strict)
 --macro Safety.safeNavigation('sys.io.abstractions')
 
---interp
+--run test.Main
