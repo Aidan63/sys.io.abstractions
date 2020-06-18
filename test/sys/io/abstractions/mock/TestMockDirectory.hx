@@ -9,12 +9,8 @@ using buddy.Should;
 
 class TestMockDirectory extends BuddySuite
 {
-    final separator : String;
-
     public function new()
     {
-        separator = #if windows '\\' #else '/' #end;
-
         describe('TestMockDirectory', {
             describe('checking for a directory', {
                 final f = [
@@ -51,17 +47,17 @@ class TestMockDirectory extends BuddySuite
 
                 it('can add a new directory', {
                     directories.create('/home/user/documents/some/');
-                    d.has('/home/user/documents/some/').should.be(true);
+                    d.has('/home/user/documents/some').should.be(true);
                 });
 
                 it('will normalize the path when creating the directory', {
                     directories.create('/home/user/documents/some/other/../directory/');
-                    d.has('/home/user/documents/some/directory/').should.be(true);
+                    d.has('/home/user/documents/some/directory').should.be(true);
                 });
 
-                it('will add a trailing slash to the path', {
+                it('will not add a trailing slash to the path', {
                     directories.create('/home/user/documents/some');
-                    d.has('/home/user/documents/some${separator}').should.be(true);
+                    d.has('/home/user/documents/some').should.be(true);
                 });
 
                 it('will throw an argument exception when passed whitespace for the path', {
@@ -109,11 +105,11 @@ class TestMockDirectory extends BuddySuite
                 final directories = new MockDirectory(f, d);
 
                 it('can fetch a files of all files and directories within a directory', {
-                    directories.read('/home/user/documents').should.containAll([ '/home/user/documents/file1.txt', '/home/user/documents/folder' ]);
+                    directories.read('/home/user/documents').should.containAll([ 'file1.txt', 'folder' ]);
                 });
 
                 it('will normalize the input path and read fetch all files and directories within the directory', {
-                    directories.read('/home/user/documents/other/..').should.containAll([ '/home/user/documents/file1.txt', '/home/user/documents/folder' ]);
+                    directories.read('/home/user/documents/other/..').should.containAll([ 'file1.txt', 'folder' ]);
                 });
 
                 it('will throw an argument exception when passed whitespace for the path', {

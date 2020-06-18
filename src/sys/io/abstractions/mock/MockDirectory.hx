@@ -1,8 +1,10 @@
 package sys.io.abstractions.mock;
 
+import haxe.io.Path;
 import sys.io.abstractions.exceptions.ArgumentException;
 import sys.io.abstractions.exceptions.NotFoundException;
 
+using Safety;
 using Lambda;
 using StringTools;
 
@@ -72,7 +74,7 @@ class MockDirectory implements IDirectory
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        final normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
+        final normalized = haxe.io.Path.removeTrailingSlashes(haxe.io.Path.normalize(_path));
 
         directories.push(normalized);
     }
@@ -89,7 +91,7 @@ class MockDirectory implements IDirectory
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        final normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
+        final normalized = haxe.io.Path.removeTrailingSlashes(haxe.io.Path.normalize(_path));
 
         var totalRemoved = 0;
         
@@ -138,34 +140,40 @@ class MockDirectory implements IDirectory
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        final output    = [];
-        final normalized = haxe.io.Path.addTrailingSlash(haxe.io.Path.normalize(_path));
+        final output = [];
+        final target = Path.removeTrailingSlashes(Path.normalize(_path));
 
-        if (!exist(normalized))
+        if (!exist(target))
         {
-            throw new NotFoundException('Directory $normalized does not exist');
+            throw new NotFoundException('Directory ${ target } does not exist');
         }
 
         for (directory in directories)
         {
-            if (directory.startsWith(normalized))
+            final item = new Path(directory);
+
+            if (item.dir.sure().startsWith(Path.addTrailingSlash(target)))
             {
-                var item = haxe.io.Path.join([ normalized, directory.substr(normalized.length).split('/')[0] ]);
-                if (!output.has(item))
+                final additional = item.dir.sure().substr(target.length + 1).split('/')[0];
+
+                if (additional != '' && !output.has(additional))
                 {
-                    output.push(item);
+                    output.push(additional);
                 }
             }
         }
 
         for (path in files.keys())
         {
-            if (path.startsWith(normalized))
+            final item = new Path(path);
+
+            if (item.dir == target)
             {
-                var item = haxe.io.Path.join([ normalized, path.substr(normalized.length).split('/')[0] ]);
-                if (!output.has(item))
+                final file = item.file + '.' + item.ext;
+
+                if (!output.has(file.sure()))
                 {
-                    output.push(item);
+                    output.push(file.sure());
                 }
             }
         }
