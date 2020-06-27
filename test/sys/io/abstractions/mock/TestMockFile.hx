@@ -117,8 +117,13 @@ class TestMockFile extends BuddySuite
                     file.write.bind('   ').should.throwType(ArgumentException);
                 });
 
-                it('will thrown a not found exception if the file was not found', {
-                    file.write.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
+                it('will create the file if it does not exist', {
+                    final out = file.write('/home/user/does_not_exist.txt');
+                    out.writeString('new file');
+                    out.close();
+
+                    file.exists('/home/user/does_not_exist.txt').should.be(true);
+                    file.getText('/home/user/does_not_exist.txt').should.be('new file');
                 });
             });
 
@@ -134,13 +139,13 @@ class TestMockFile extends BuddySuite
                 });
 
                 it('will throw an argument exception when passed whitespace for the path', {
-                    file.write.bind('').should.throwType(ArgumentException);
-                    file.write.bind(' ').should.throwType(ArgumentException);
-                    file.write.bind('   ').should.throwType(ArgumentException);
+                    file.read.bind('').should.throwType(ArgumentException);
+                    file.read.bind(' ').should.throwType(ArgumentException);
+                    file.read.bind('   ').should.throwType(ArgumentException);
                 });
 
-                it('will thrown a not found exception if the file was not found', {
-                    file.write.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
+                it('will throw a not found exception if the file was not found', {
+                    file.read.bind('/home/user/does_not_exist.txt').should.throwType(NotFoundException);
                 });
             });
 

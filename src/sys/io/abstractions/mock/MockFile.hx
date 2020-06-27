@@ -123,7 +123,7 @@ class MockFile implements IFile
 
         if (!exists(normalized))
         {
-            throw new NotFoundException('${normalized} not found');
+            files.set(normalized, MockFileData.fromBytes());
         }
 
         return new MockFileOutput(files.get(normalized).sure());

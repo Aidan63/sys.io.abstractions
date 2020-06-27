@@ -98,11 +98,6 @@ class File implements IFile
             throw new ArgumentException('Provided path is only whitespace');
         }
 
-        if (!sys.FileSystem.exists(_path))
-        {
-            throw new NotFoundException('${_path} not found');
-        }
-
         return sys.io.File.write(_path);
     }
 
